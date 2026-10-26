@@ -136,7 +136,15 @@ pub struct ContactoQuery {
 
 fn render<T: Template>(page: T) -> Response {
     match page.render() {
-        Ok(body) => Html(body).into_response(),
+        Ok(body) => {
+            let mut response = Html(body).into_response();
+            // Evita que el navegador muestre una versión vieja del HTML.
+            response.headers_mut().insert(
+                axum::http::header::CACHE_CONTROL,
+                axum::http::HeaderValue::from_static("no-store, must-revalidate"),
+            );
+            response
+        }
         Err(err) => {
             eprintln!("error al renderizar plantilla: {err}");
             (
