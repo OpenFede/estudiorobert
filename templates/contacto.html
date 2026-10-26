@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="mesh border-b border-line bg-sand/30">
+  <div class="mx-auto max-w-6xl px-5 py-16 sm:px-8 lg:py-20">
+    <p class="text-[11px] uppercase tracking-[0.24em] text-ink/40">Contacto</p>
+    <div class="mt-5 grid gap-6 lg:grid-cols-12 lg:items-end">
+      <h1 class="font-display text-[42px] leading-[1.06] tracking-[-0.02em] sm:text-6xl lg:col-span-8">Empecemos por entender tu situación.</h1>
+      <p class="text-sm leading-relaxed text-ink/60 lg:col-span-4">
+        Completá el formulario o escribinos por WhatsApp. Respondemos dentro del horario de atención, generalmente el mismo día.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="mx-auto max-w-6xl px-5 py-16 sm:px-8 lg:py-20">
+  <div class="grid gap-10 lg:grid-cols-12 lg:gap-14">
+    <div class="lg:col-span-7">
+      {% if sent %}
+      <div data-reveal class="rounded-2xl border border-accent/40 bg-sand/60 p-8" role="status">
+        <span class="flex h-11 w-11 items-center justify-center rounded-full bg-ink text-paper">
+          <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.6"><path d="m5 13 4 4L19 7"/></svg>
+        </span>
+        <h2 class="mt-6 font-display text-3xl tracking-tight">Mensaje recibido</h2>
+        <p class="mt-3 max-w-md text-sm leading-relaxed text-ink/60">
+          Gracias por escribirnos. Vamos a revisar tu consulta y te contactamos al correo o teléfono que indicaste. Si tu caso es urgente, llamanos directamente.
+        </p>
+        <div class="mt-7 flex flex-wrap gap-3">
+          <a href="/" class="rounded-full border border-line px-5 py-2.5 text-[13px] font-medium text-ink transition hover:bg-white">Volver al inicio</a>
+          <a href="tel:{{ site.phone_tel }}" class="rounded-full bg-ink px-5 py-2.5 text-[13px] font-medium text-paper transition hover:bg-ink-soft">Llamar al estudio</a>
+        </div>
+      </div>
+      {% else %}
+      <form data-reveal method="post" action="/contacto" class="rounded-2xl border border-line bg-white/50 p-6 sm:p-8" novalidate>
+        <h2 class="font-display text-2xl tracking-tight">Consulta</h2>
+        <p class="mt-2 text-[12.5px] text-ink/50">Los campos marcados con <span class="text-accent">*</span> son obligatorios.</p>
+
+        {% if !errors.is_empty() %}
+        <div class="mt-6 rounded-xl border border-red-200 bg-red-50/70 p-4" role="alert">
+          <p class="text-[13px] font-medium text-red-800">Revisá estos puntos antes de enviar:</p>
+          <ul class="mt-2 list-inside list-disc space-y-1 text-[12.5px] text-red-700">
+            {% for error in errors %}<li>{{ error }}</li>{% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+
+        <div class="mt-7 grid gap-5 sm:grid-cols-2">
+          <div>
+            <label for="name" class="block text-[12px] font-medium text-ink/70">Nombre y apellido <span class="text-accent">*</span></label>
+            <input id="name" name="name" type="text" autocomplete="name" required value="{{ form.name }}"
+                   class="mt-2 w-full rounded-xl border border-line bg-paper px-4 py-3 text-sm text-ink placeholder-ink/30 transition focus:border-ink/40 focus:bg-white focus:outline-none">
+          </div>
+          <div>
+            <label for="phone" class="block text-[12px] font-medium text-ink/70">Teléfono</label>
+            <input id="phone" name="phone" type="tel" autocomplete="tel" value="{{ form.phone }}"
+                   class="mt-2 w-full rounded-xl border border-line bg-paper px-4 py-3 text-sm text-ink placeholder-ink/30 transition focus:border-ink/40 focus:bg-white focus:outline-none">
+          </div>
+          <div>
+            <label for="email" class="block text-[12px] font-medium text-ink/70">Correo electrónico <span class="text-accent">*</span></label>
+            <input id="email" name="email" type="email" autocomplete="email" required value="{{ form.email }}"
+                   class="mt-2 w-full rounded-xl border border-line bg-paper px-4 py-3 text-sm text-ink placeholder-ink/30 transition focus:border-ink/40 focus:bg-white focus:outline-none">
+          </div>
+          <div>
+            <label for="area" class="block text-[12px] font-medium text-ink/70">Área</label>
+            <select id="area" name="area"
+                    class="mt-2 w-full appearance-none rounded-xl border border-line bg-paper px-4 py-3 text-sm text-ink transition focus:border-ink/40 focus:bg-white focus:outline-none">
+              <option value="">Seleccioná una opción</option>
+              {% for area in areas %}
+              <option value="{{ area.slug }}" {% if form.area == area.slug %}selected{% endif %}>{{ area.title }}</option>
+              {% endfor %}
+              <option value="otra" {% if form.area == "otra" %}selected{% endif %}>Otra / no estoy seguro</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="mt-5">
+          <label for="message" class="block text-[12px] font-medium text-ink/70">Contanos brevemente tu caso <span class="text-accent">*</span></label>
+          <textarea id="message" name="message" rows="5" required
+                    class="mt-2 w-full rounded-xl border border-line bg-paper px-4 py-3 text-sm leading-relaxed text-ink placeholder-ink/30 transition focus:border-ink/40 focus:bg-white focus:outline-none"
+                    placeholder="Qué pasó, cuándo y qué documentación tenés.">{{ form.message }}</textarea>
+          <p class="mt-2 text-[11px] text-ink/40">No incluyas datos sensibles en este primer mensaje.</p>
+        </div>
+
+        <div class="mt-5 flex items-start gap-3">
+          <input id="consent" name="consent" type="checkbox" value="si" {% if form.consent_checked() %}checked{% endif %}
+                 class="mt-0.5 h-4 w-4 rounded border-line text-ink focus:ring-accent">
+          <label for="consent" class="text-[12px] leading-relaxed text-ink/55">
+            Autorizo el uso de mis datos para responder esta consulta, conforme a la Ley 25.326. <span class="text-accent">*</span>
+          </label>
+        </div>
+
+        <div class="sr-only" aria-hidden="true">
+          <label for="website">No completar</label>
+          <input id="website" name="website" type="text" tabindex="-1" autocomplete="off">
+        </div>
+
+        <div class="mt-7 flex flex-wrap items-center justify-between gap-4">
+          <button type="submit" class="btn-sheen inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3.5 text-sm font-medium text-paper transition hover:bg-ink-soft">
+            Enviar consulta
+            <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14m-5-5 5 5-5 5"/></svg>
+          </button>
+          <p class="text-[11px] text-ink/40">Respuesta en el día hábil.</p>
+        </div>
+      </form>
+      {% endif %}
+    </div>
+
+    <aside class="lg:col-span-5">
+      <div data-reveal class="rounded-2xl bg-ink p-8 text-paper">
+        <p class="text-[10px] uppercase tracking-[0.26em] text-paper/40">Datos de contacto</p>
+        <ul class="mt-6 space-y-6 text-sm">
+          <li>
+            <p class="text-[10px] uppercase tracking-[0.16em] text-paper/35">Estudio</p>
+            <a href="{{ site.maps }}" target="_blank" rel="noopener" class="mt-1.5 block text-paper/90 underline decoration-paper/20 underline-offset-4 transition hover:decoration-accent">
+              {{ site.address }}<br>{{ site.city }}
+            </a>
+          </li>
+          <li>
+            <p class="text-[10px] uppercase tracking-[0.16em] text-paper/35">Teléfono</p>
+            <a href="tel:{{ site.phone_tel }}" class="mt-1.5 block text-paper/90 transition hover:text-accent">{{ site.phone_display }}</a>
+          </li>
+          <li>
+            <p class="text-[10px] uppercase tracking-[0.16em] text-paper/35">Correo</p>
+            <a href="mailto:{{ site.email }}" class="mt-1.5 block break-all text-paper/90 transition hover:text-accent">{{ site.email }}</a>
+          </li>
+          <li>
+            <p class="text-[10px] uppercase tracking-[0.16em] text-paper/35">Horario</p>
+            <p class="mt-1.5 text-paper/90">{{ site.hours }}</p>
+          </li>
+        </ul>
+        <div class="mt-8 flex flex-col gap-2">
+          <a href="https://wa.me/{{ site.whatsapp }}" target="_blank" rel="noopener" class="rounded-full bg-paper px-5 py-3 text-center text-[13px] font-medium text-ink transition hover:bg-white">Escribir por WhatsApp</a>
+          <a href="{{ site.maps }}" target="_blank" rel="noopener" class="rounded-full border border-paper/20 px-5 py-3 text-center text-[13px] font-medium text-paper transition hover:border-paper/50">Ver ubicación</a>
+        </div>
+      </div>
+
+      <div data-reveal class="mt-5 rounded-2xl border border-line bg-white/40 p-7">
+        <h2 class="text-[13px] font-semibold tracking-tight">Para agilizar la consulta</h2>
+        <ul class="mt-4 space-y-3 text-[12.5px] leading-relaxed text-ink/55">
+          <li class="flex gap-3"><span class="text-accent">—</span>Fechas y hechos ordenados cronológicamente.</li>
+          <li class="flex gap-3"><span class="text-accent">—</span>Contratos, notificaciones o mensajes relevantes.</li>
+          <li class="flex gap-3"><span class="text-accent">—</span>Datos de la otra parte, si los tenés.</li>
+          <li class="flex gap-3"><span class="text-accent">—</span>Si ya hay un expediente, número y fuero.</li>
+        </ul>
+        <p class="mt-5 text-[11px] leading-relaxed text-ink/40">Este formulario no suspende plazos ni constituye patrocinio legal hasta la aceptación del caso.</p>
+      </div>
+    </aside>
+  </div>
+</section>
+{% endblock %}

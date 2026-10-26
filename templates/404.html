@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="mx-auto flex min-h-[60vh] max-w-6xl flex-col items-start justify-center px-5 py-24 sm:px-8">
+  <p class="text-[11px] uppercase tracking-[0.24em] text-ink/40">Error 404</p>
+  <h1 class="mt-5 font-display text-5xl tracking-tight sm:text-6xl">Esta página no existe.</h1>
+  <p class="mt-5 max-w-md text-sm leading-relaxed text-ink/60">Puede que el enlace haya cambiado. Volvé al inicio o escribinos y te orientamos.</p>
+  <div class="mt-8 flex flex-wrap gap-3">
+    <a href="/" class="rounded-full bg-ink px-6 py-3.5 text-sm font-medium text-paper transition hover:bg-ink-soft">Ir al inicio</a>
+    <a href="/contacto" class="rounded-full border border-line px-6 py-3.5 text-sm font-medium text-ink transition hover:bg-sand/60">Contacto</a>
+  </div>
+</section>
+{% endblock %}

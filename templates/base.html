@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="es-AR" class="scroll-smooth">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{{ title }}{% endblock %} · Estudio Robert</title>
+  <meta name="description" content="{{ description }}">
+  <meta name="theme-color" content="#0a0a0b">
+  <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+  <meta property="og:title" content="{{ title }} · Estudio Robert">
+  <meta property="og:description" content="{{ description }}">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="es_AR">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ink: '#0a0a0b',
+            'ink-soft': '#1b1b1e',
+            paper: '#fcfcfc',
+            sand: '#f3f3f3',
+            line: '#e5e5e5',
+            accent: '#8a8a8a'
+          },
+          fontFamily: {
+            display: ['Manrope', 'system-ui', 'sans-serif'],
+            sans: ['Inter', 'system-ui', 'sans-serif']
+          },
+          boxShadow: {
+            soft: '0 1px 2px rgba(0,0,0,.04), 0 24px 60px -30px rgba(0,0,0,.45)'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    :root { color-scheme: light; }
+    ::selection { background: #0a0a0b; color: #fcfcfc; }
+    body { text-rendering: optimizeLegibility; }
+    .grain {
+      background-image:
+        radial-gradient(circle at 18% 22%, rgba(255,255,255,.13), transparent 42%),
+        radial-gradient(circle at 82% 0%, rgba(255,255,255,.08), transparent 38%),
+        linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px);
+      background-size: auto, auto, 56px 56px, 56px 56px;
+    }
+    .fade-up { animation: fade-up .8s cubic-bezier(.22,.61,.36,1) both; }
+    .delay-1 { animation-delay: .1s; }
+    .delay-2 { animation-delay: .2s; }
+    .delay-3 { animation-delay: .3s; }
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(18px); filter: blur(6px); }
+      to { opacity: 1; transform: none; filter: blur(0); }
+    }
+    /* Revelado al hacer scroll (progressive enhancement). */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      filter: blur(7px);
+      transition: opacity .9s cubic-bezier(.22,.61,.36,1),
+                  transform .9s cubic-bezier(.22,.61,.36,1),
+                  filter .9s cubic-bezier(.22,.61,.36,1);
+      transition-delay: var(--reveal-delay, 0ms);
+    }
+    .reveal.is-visible { opacity: 1; transform: none; filter: blur(0); }
+    .mesh { position: relative; isolation: isolate; }
+    .mesh::before {
+      content: "";
+      position: absolute;
+      inset: -35%;
+      z-index: -1;
+      background:
+        radial-gradient(closest-side, rgba(0,0,0,.07), transparent 70%),
+        radial-gradient(closest-side, rgba(0,0,0,.045), transparent 70%);
+      background-position: 20% 30%, 80% 70%;
+      background-size: 60% 60%, 55% 55%;
+      background-repeat: no-repeat;
+      filter: blur(50px);
+      animation: drift 20s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+    @keyframes drift {
+      0% { transform: translate3d(-2%, -1%, 0) scale(1); }
+      100% { transform: translate3d(3%, 2%, 0) scale(1.08); }
+    }
+    .float-slow { animation: float-slow 7s ease-in-out infinite; }
+    @keyframes float-slow {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+    .marquee { overflow: hidden; mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
+    .marquee-track { display: flex; width: max-content; animation: marquee 38s linear infinite; }
+    .marquee:hover .marquee-track { animation-play-state: paused; }
+    @keyframes marquee { to { transform: translateX(-50%); } }
+    .nav-link { position: relative; }
+    .nav-link::after {
+      content: "";
+      position: absolute;
+      left: 0; bottom: -6px;
+      height: 1px; width: 100%;
+      background: #0a0a0b;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform .35s cubic-bezier(.22,.61,.36,1);
+    }
+    .nav-link:hover::after, .nav-link.is-active::after { transform: scaleX(1); }
+    .btn-sheen { position: relative; overflow: hidden; }
+    .btn-sheen::after {
+      content: "";
+      position: absolute; inset: 0;
+      background: linear-gradient(115deg, transparent 20%, rgba(255,255,255,.22) 50%, transparent 80%);
+      transform: translateX(-120%);
+      transition: transform .7s ease;
+    }
+    .btn-sheen:hover::after { transform: translateX(120%); }
+    .text-sheen {
+      background: linear-gradient(100deg, #0a0a0b 15%, #9a9a9a 55%, #0a0a0b 90%);
+      background-size: 200% 100%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: sheen 9s ease-in-out infinite;
+    }
+    @keyframes sheen {
+      0%, 100% { background-position: 0% 0; }
+      50% { background-position: 100% 0; }
+    }
+    header.is-scrolled { box-shadow: 0 1px 0 #e5e5e5, 0 18px 40px -34px rgba(0,0,0,.55); }
+    #progress { transition: width .1s linear; }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .fade-up, .float-slow, .text-sheen, .mesh::before, .marquee-track { animation: none; }
+      .reveal { opacity: 1; transform: none; filter: none; transition: none; }
+      * { transition-duration: .01ms !important; }
+    }
+    h1, h2, .font-display { font-weight: 300 !important; }
+    :focus-visible { outline: 2px solid #0a0a0b; outline-offset: 3px; border-radius: 2px; }
+    details > summary { list-style: none; }
+    details > summary::-webkit-details-marker { display: none; }
+    details[open] .plus { transform: rotate(45deg); }
+    .plus { transition: transform .2s ease; }
+    .anchor-offset { scroll-margin-top: 6.5rem; }
+  </style>
+  <noscript><style>.reveal{opacity:1;transform:none;filter:none}</style></noscript>
+</head>
+<body class="bg-paper font-sans text-ink antialiased">
+  <div id="progress" class="fixed left-0 top-0 z-[60] h-[2px] w-0 bg-ink"></div>
+  <a href="#contenido" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-full focus:bg-ink focus:px-4 focus:py-2 focus:text-sm focus:text-paper">Saltar al contenido</a>
+
+  <header data-header class="sticky top-0 z-50 border-b border-line/80 bg-paper/85 backdrop-blur-md transition-shadow duration-300">
+    <div class="mx-auto flex h-20 max-w-6xl items-center justify-between gap-6 px-5 sm:px-8">
+      <a href="/" class="group flex items-center gap-3" aria-label="Estudio Robert, inicio">
+        <svg viewBox="0 0 32 32" class="h-8 w-8 text-ink" aria-hidden="true" fill="none">
+          <rect x="1.5" y="1.5" width="29" height="29" rx="3" stroke="currentColor" stroke-opacity=".25"/>
+          <path d="M10 8h6.2c2.6 0 4.3 1.5 4.3 3.9 0 1.8-1 3.1-2.6 3.6L21.8 24h-3.4l-3.2-7.4h-2V24H10V8Zm3.2 2.6v3.4h2.6c1.1 0 1.7-.6 1.7-1.7s-.6-1.7-1.7-1.7h-2.6Z" fill="currentColor"/>
+          <circle cx="24.5" cy="8.5" r="1.5" fill="#a9865a"/>
+        </svg>
+        <span class="flex flex-col leading-none">
+          <span class="font-display text-[22px] tracking-tight text-ink">Robert</span>
+          <span class="mt-1 text-[9px] uppercase tracking-[0.28em] text-ink/45">Abogados · Córdoba</span>
+        </span>
+      </a>
+
+      <nav class="hidden items-center gap-8 md:flex" aria-label="Principal">
+        {% for item in site.nav %}
+        <a href="{{ item.href }}"
+           class="nav-link py-1 text-[12.5px] font-medium tracking-wide transition-colors {% if active == item.key %}is-active text-ink{% else %}text-ink/50 hover:text-ink{% endif %}">
+          {{ item.label }}
+        </a>
+        {% endfor %}
+      </nav>
+
+      <div class="flex items-center gap-2">
+        <a href="/contacto" class="btn-sheen hidden rounded-full bg-ink px-5 py-2.5 text-[12px] font-medium tracking-wide text-paper transition hover:bg-ink-soft sm:inline-flex">
+          Agendar consulta
+        </a>
+        <details class="relative md:hidden">
+          <summary class="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-line text-ink" aria-label="Abrir menú">
+            <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 8h16M4 16h16"/></svg>
+          </summary>
+          <div class="absolute right-0 top-12 w-64 rounded-2xl border border-line bg-paper p-3 shadow-soft">
+            {% for item in site.nav %}
+            <a href="{{ item.href }}" class="block rounded-xl px-4 py-3 text-sm {% if active == item.key %}bg-sand font-medium text-ink{% else %}text-ink/70 hover:bg-sand/60{% endif %}">{{ item.label }}</a>
+            {% endfor %}
+            <a href="/contacto" class="mt-2 block rounded-xl bg-ink px-4 py-3 text-center text-sm text-paper">Agendar consulta</a>
+          </div>
+        </details>
+      </div>
+    </div>
+  </header>
+
+  <main id="contenido">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="border-t border-line bg-sand/50">
+    <div class="mx-auto max-w-6xl px-5 py-16 sm:px-8">
+      <div class="grid gap-12 md:grid-cols-12">
+        <div class="md:col-span-5">
+          <p class="font-display text-3xl tracking-tight text-ink">Robert</p>
+          <p class="mt-1 text-[10px] uppercase tracking-[0.28em] text-ink/45">Abogados · Córdoba Capital</p>
+          <p class="mt-6 max-w-sm text-sm leading-relaxed text-ink/60">
+            Asesoramiento jurídico con atención directa, plazos claros y honorarios acordados por escrito.
+          </p>
+          <a href="/contacto" class="mt-6 inline-flex items-center gap-2 text-sm font-medium text-ink underline decoration-accent/60 decoration-1 underline-offset-4 hover:decoration-accent">
+            Coordinar una consulta
+            <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14m-5-5 5 5-5 5"/></svg>
+          </a>
+        </div>
+
+        <div class="md:col-span-3">
+          <p class="text-[10px] uppercase tracking-[0.22em] text-ink/40">Navegación</p>
+          <ul class="mt-4 space-y-3 text-sm">
+            {% for item in site.nav %}
+            <li><a href="{{ item.href }}" class="text-ink/65 transition hover:text-ink">{{ item.label }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+
+        <div class="md:col-span-4">
+          <p class="text-[10px] uppercase tracking-[0.22em] text-ink/40">Contacto</p>
+          <ul class="mt-4 space-y-3 text-sm text-ink/65">
+            <li><a href="{{ site.maps }}" target="_blank" rel="noopener" class="transition hover:text-ink">{{ site.address }}<br><span class="text-ink/45">{{ site.city }}</span></a></li>
+            <li><a href="tel:{{ site.phone_tel }}" class="transition hover:text-ink">{{ site.phone_display }}</a></li>
+            <li><a href="mailto:{{ site.email }}" class="transition hover:text-ink">{{ site.email }}</a></li>
+            <li class="text-ink/45">{{ site.hours }}</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="mt-14 flex flex-col gap-4 border-t border-line pt-6 text-[11px] text-ink/40 sm:flex-row sm:items-center sm:justify-between">
+        <p>© {{ site.year }} Estudio Robert. Todos los derechos reservados.</p>
+        <p>La información de este sitio es general y no constituye asesoramiento legal.</p>
+      </div>
+    </div>
+  </footer>
+
+  <a href="https://wa.me/{{ site.whatsapp }}" target="_blank" rel="noopener"
+     class="fixed bottom-6 right-6 z-40 flex h-12 w-12 items-center justify-center rounded-full bg-ink text-paper shadow-soft transition duration-300 hover:-translate-y-0.5 hover:bg-ink-soft"
+     aria-label="Escribir por WhatsApp">
+    <svg viewBox="0 0 24 24" class="h-5 w-5" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 004.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0012.04 2zm0 18.15a8.2 8.2 0 01-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 01-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 012.41 5.83c0 4.54-3.7 8.23-8.24 8.23zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.24-.64.8-.79.97-.14.16-.29.18-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.5.11-.11.25-.29.37-.43.13-.15.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.4-.42-.56-.43h-.48c-.16 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.14-1.18-.06-.11-.22-.17-.47-.29z"/></svg>
+  </a>
+  <script src="/static/app.js" defer></script>
+</body>
+</html>

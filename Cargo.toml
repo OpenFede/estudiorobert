@@ -1,0 +1,15 @@
+[package]
+name = "estudio-robert"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+axum = "0.8"
+tokio = { version = "1", features = ["full"] }
+askama = "0.14"
+tower-http = { version = "0.6", features = ["fs"] }
+serde = { version = "1", features = ["derive"] }
+
+[profile.release]
+strip = true
+lto = true
