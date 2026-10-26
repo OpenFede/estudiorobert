@@ -5,7 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}{{ title }}{% endblock %} · Estudio Robert</title>
   <meta name="description" content="{{ description }}">
-  <meta name="theme-color" content="#0a0a0b">
+  <meta name="theme-color" content="#fcfcfc" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0b0b0d" media="(prefers-color-scheme: dark)">
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem('theme');
+        var dark = saved ? saved === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.classList.toggle('dark', dark);
+      } catch (e) {}
+    })();
+  </script>
   <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
   <meta property="og:title" content="{{ title }} · Estudio Robert">
   <meta property="og:description" content="{{ description }}">
@@ -13,22 +23,23 @@
   <meta property="og:locale" content="es_AR">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@200..700&family=Inter:wght@300..600&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
+      darkMode: 'class',
       theme: {
         extend: {
           colors: {
-            ink: '#0a0a0b',
-            'ink-soft': '#1b1b1e',
-            paper: '#fcfcfc',
-            sand: '#f3f3f3',
-            line: '#e5e5e5',
-            accent: '#8a8a8a'
+            ink: 'rgb(var(--c-ink) / <alpha-value>)',
+            'ink-soft': 'rgb(var(--c-ink-soft) / <alpha-value>)',
+            paper: 'rgb(var(--c-paper) / <alpha-value>)',
+            sand: 'rgb(var(--c-sand) / <alpha-value>)',
+            line: 'rgb(var(--c-line) / <alpha-value>)',
+            accent: 'rgb(var(--c-accent) / <alpha-value>)'
           },
           fontFamily: {
-            display: ['Manrope', 'system-ui', 'sans-serif'],
+            display: ['Sora', 'system-ui', 'sans-serif'],
             sans: ['Inter', 'system-ui', 'sans-serif']
           },
           boxShadow: {
@@ -39,9 +50,37 @@
     }
   </script>
   <style>
-    :root { color-scheme: light; }
-    ::selection { background: #0a0a0b; color: #fcfcfc; }
-    body { text-rendering: optimizeLegibility; }
+    :root {
+      color-scheme: light;
+      --c-ink: 10 10 11;
+      --c-ink-soft: 27 27 30;
+      --c-paper: 252 252 252;
+      --c-sand: 243 243 243;
+      --c-line: 229 229 229;
+      --c-accent: 138 138 138;
+    }
+    .dark {
+      color-scheme: dark;
+      --c-ink: 242 242 244;
+      --c-ink-soft: 255 255 255;
+      --c-paper: 11 11 13;
+      --c-sand: 20 20 23;
+      --c-line: 40 40 45;
+      --c-accent: 158 158 163;
+    }
+    /* Los bloques invertidos conservan su paleta oscura en ambos temas. */
+    .panel {
+      --c-ink: 10 10 11;
+      --c-ink-soft: 27 27 30;
+      --c-paper: 252 252 252;
+      --c-sand: 243 243 243;
+      --c-line: 229 229 229;
+      --c-accent: 138 138 138;
+    }
+    ::selection { background: rgb(var(--c-ink)); color: rgb(var(--c-paper)); }
+    body { text-rendering: optimizeLegibility; overflow-x: hidden; }
+    h1, h2, .font-display { font-weight: 300 !important; }
+    h1, h2 { line-height: 1.1; padding-bottom: .06em; }
     .grain {
       background-image:
         radial-gradient(circle at 18% 22%, rgba(255,255,255,.13), transparent 42%),
@@ -69,15 +108,15 @@
       transition-delay: var(--reveal-delay, 0ms);
     }
     .reveal.is-visible { opacity: 1; transform: none; filter: blur(0); }
-    .mesh { position: relative; isolation: isolate; }
+    .mesh { position: relative; isolation: isolate; overflow: hidden; }
     .mesh::before {
       content: "";
       position: absolute;
       inset: -35%;
       z-index: -1;
       background:
-        radial-gradient(closest-side, rgba(0,0,0,.07), transparent 70%),
-        radial-gradient(closest-side, rgba(0,0,0,.045), transparent 70%);
+        radial-gradient(closest-side, rgb(var(--c-ink) / .09), transparent 70%),
+        radial-gradient(closest-side, rgb(var(--c-ink) / .06), transparent 70%);
       background-position: 20% 30%, 80% 70%;
       background-size: 60% 60%, 55% 55%;
       background-repeat: no-repeat;
@@ -104,7 +143,7 @@
       position: absolute;
       left: 0; bottom: -6px;
       height: 1px; width: 100%;
-      background: #0a0a0b;
+      background: rgb(var(--c-ink));
       transform: scaleX(0);
       transform-origin: left;
       transition: transform .35s cubic-bezier(.22,.61,.36,1);
@@ -120,27 +159,47 @@
     }
     .btn-sheen:hover::after { transform: translateX(120%); }
     .text-sheen {
-      background: linear-gradient(100deg, #0a0a0b 15%, #9a9a9a 55%, #0a0a0b 90%);
+      background: linear-gradient(100deg, rgb(var(--c-ink)) 15%, rgb(var(--c-accent)) 55%, rgb(var(--c-ink)) 90%);
       background-size: 200% 100%;
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
       animation: sheen 9s ease-in-out infinite;
+      display: inline-block;
+      padding-bottom: .1em;
+      margin-bottom: -.1em;
     }
     @keyframes sheen {
       0%, 100% { background-position: 0% 0; }
       50% { background-position: 100% 0; }
     }
-    header.is-scrolled { box-shadow: 0 1px 0 #e5e5e5, 0 18px 40px -34px rgba(0,0,0,.55); }
+    header.is-scrolled { box-shadow: 0 1px 0 rgb(var(--c-line)), 0 18px 40px -34px rgba(0,0,0,.55); }
+    .dark header.is-scrolled { box-shadow: 0 1px 0 rgb(var(--c-line)), 0 18px 40px -20px rgba(0,0,0,.9); }
     #progress { transition: width .1s linear; }
+    [data-icon-sun] { display: none; }
+    .dark [data-icon-sun] { display: block; }
+    .dark [data-icon-moon] { display: none; }
+    .spotlight { position: relative; overflow: hidden; }
+    .spotlight::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      background: radial-gradient(320px circle at var(--mx, 50%) var(--my, 50%), rgb(var(--c-ink) / .06), transparent 65%);
+      transition: opacity .35s ease;
+      pointer-events: none;
+    }
+    .spotlight:hover::before { opacity: 1; }
+    html.theme-anim, html.theme-anim *, html.theme-anim *::before, html.theme-anim *::after {
+      transition: background-color .35s ease, border-color .35s ease, color .35s ease, fill .35s ease, box-shadow .35s ease !important;
+    }
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       .fade-up, .float-slow, .text-sheen, .mesh::before, .marquee-track { animation: none; }
       .reveal { opacity: 1; transform: none; filter: none; transition: none; }
       * { transition-duration: .01ms !important; }
     }
-    h1, h2, .font-display { font-weight: 300 !important; }
-    :focus-visible { outline: 2px solid #0a0a0b; outline-offset: 3px; border-radius: 2px; }
+    :focus-visible { outline: 2px solid rgb(var(--c-ink)); outline-offset: 3px; border-radius: 2px; }
     details > summary { list-style: none; }
     details > summary::-webkit-details-marker { display: none; }
     details[open] .plus { transform: rotate(45deg); }
@@ -163,7 +222,7 @@
         </svg>
         <span class="flex flex-col leading-none">
           <span class="font-display text-[22px] tracking-tight text-ink">Robert</span>
-          <span class="mt-1 text-[9px] uppercase tracking-[0.28em] text-ink/45">Abogados · Córdoba</span>
+          <span class="mt-1 whitespace-nowrap text-[8px] uppercase tracking-[0.2em] text-ink/45 sm:text-[9px] sm:tracking-[0.28em]">Abogados · Córdoba</span>
         </span>
       </a>
 
@@ -177,6 +236,11 @@
       </nav>
 
       <div class="flex items-center gap-2">
+        <button type="button" data-theme-toggle aria-label="Activar modo oscuro" aria-pressed="false"
+                class="flex h-10 w-10 items-center justify-center rounded-full border border-line text-ink/65 transition hover:border-ink/30 hover:text-ink">
+          <svg data-icon-moon viewBox="0 0 24 24" class="h-[18px] w-[18px]" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 12.8A8.5 8.5 0 1111.2 3a6.5 6.5 0 009.8 9.8z"/></svg>
+          <svg data-icon-sun viewBox="0 0 24 24" class="h-[18px] w-[18px]" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4"/></svg>
+        </button>
         <a href="/contacto" class="btn-sheen hidden rounded-full bg-ink px-5 py-2.5 text-[12px] font-medium tracking-wide text-paper transition hover:bg-ink-soft sm:inline-flex">
           Agendar consulta
         </a>
@@ -242,10 +306,10 @@
   </footer>
 
   <a href="https://wa.me/{{ site.whatsapp }}" target="_blank" rel="noopener"
-     class="fixed bottom-6 right-6 z-40 flex h-12 w-12 items-center justify-center rounded-full bg-ink text-paper shadow-soft transition duration-300 hover:-translate-y-0.5 hover:bg-ink-soft"
+     class="fixed bottom-4 right-4 z-40 flex h-11 w-11 items-center justify-center rounded-full bg-ink text-paper shadow-soft transition duration-300 hover:-translate-y-0.5 hover:bg-ink-soft sm:bottom-6 sm:right-6 sm:h-12 sm:w-12"
      aria-label="Escribir por WhatsApp">
     <svg viewBox="0 0 24 24" class="h-5 w-5" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 004.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0012.04 2zm0 18.15a8.2 8.2 0 01-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 01-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 012.41 5.83c0 4.54-3.7 8.23-8.24 8.23zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.24-.64.8-.79.97-.14.16-.29.18-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.5.11-.11.25-.29.37-.43.13-.15.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.4-.42-.56-.43h-.48c-.16 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.14-1.18-.06-.11-.22-.17-.47-.29z"/></svg>
   </a>
-  <script src="/static/app.js?v=2" defer></script>
+  <script src="/static/app.js?v=3" defer></script>
 </body>
 </html>

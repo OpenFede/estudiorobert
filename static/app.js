@@ -1,7 +1,34 @@
 (() => {
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // Revelado suave al entrar en viewport.
+  // ── Tema claro / oscuro ───────────────────────────────────────────────────
+  const root = document.documentElement;
+  const toggle = document.querySelector('[data-theme-toggle]');
+
+  const applyTheme = (dark) => {
+    root.classList.toggle('dark', dark);
+    if (!toggle) return;
+    toggle.setAttribute('aria-pressed', String(dark));
+    toggle.setAttribute('aria-label', dark ? 'Activar modo claro' : 'Activar modo oscuro');
+  };
+
+  applyTheme(root.classList.contains('dark'));
+
+  if (toggle) {
+    toggle.addEventListener('click', () => {
+      const dark = !root.classList.contains('dark');
+      applyTheme(dark);
+      try {
+        localStorage.setItem('theme', dark ? 'dark' : 'light');
+      } catch (e) {}
+      if (!reduce) {
+        root.classList.add('theme-anim');
+        window.setTimeout(() => root.classList.remove('theme-anim'), 420);
+      }
+    });
+  }
+
+  // ── Revelado suave al entrar en viewport ─────────────────────────────────
   const items = document.querySelectorAll('[data-reveal]');
   if (!reduce && 'IntersectionObserver' in window) {
     const io = new IntersectionObserver(
@@ -20,7 +47,18 @@
     items.forEach((el) => el.classList.add('is-visible'));
   }
 
-  // Barra de progreso de lectura y header con sombra.
+  // ── Luz que sigue al cursor en tarjetas ──────────────────────────────────
+  if (!reduce && window.matchMedia('(hover: hover)').matches) {
+    document.querySelectorAll('.spotlight').forEach((card) => {
+      card.addEventListener('pointermove', (event) => {
+        const rect = card.getBoundingClientRect();
+        card.style.setProperty('--mx', `${event.clientX - rect.left}px`);
+        card.style.setProperty('--my', `${event.clientY - rect.top}px`);
+      });
+    });
+  }
+
+  // ── Progreso de lectura y header ─────────────────────────────────────────
   const progress = document.getElementById('progress');
   const header = document.querySelector('[data-header]');
   let ticking = false;

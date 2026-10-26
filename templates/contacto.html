@@ -5,7 +5,7 @@
   <div class="mx-auto max-w-6xl px-5 py-16 sm:px-8 lg:py-20">
     <p class="text-[11px] uppercase tracking-[0.24em] text-ink/40">Contacto</p>
     <div class="mt-5 grid gap-6 lg:grid-cols-12 lg:items-end">
-      <h1 class="font-display text-[42px] leading-[1.06] tracking-[-0.02em] sm:text-6xl lg:col-span-8">Empecemos por entender tu situación.</h1>
+      <h1 class="font-display text-[34px] leading-[1.08] tracking-[-0.02em] sm:text-6xl lg:col-span-8">Empecemos por entender tu situación.</h1>
       <p class="text-sm leading-relaxed text-ink/60 lg:col-span-4">
         Completá el formulario o escribinos por WhatsApp. Respondemos dentro del horario de atención, generalmente el mismo día.
       </p>
@@ -26,12 +26,12 @@
           Gracias por escribirnos. Vamos a revisar tu consulta y te contactamos al correo o teléfono que indicaste. Si tu caso es urgente, llamanos directamente.
         </p>
         <div class="mt-7 flex flex-wrap gap-3">
-          <a href="/" class="rounded-full border border-line px-5 py-2.5 text-[13px] font-medium text-ink transition hover:bg-white">Volver al inicio</a>
+          <a href="/" class="rounded-full border border-line px-5 py-2.5 text-[13px] font-medium text-ink transition hover:bg-sand">Volver al inicio</a>
           <a href="tel:{{ site.phone_tel }}" class="rounded-full bg-ink px-5 py-2.5 text-[13px] font-medium text-paper transition hover:bg-ink-soft">Llamar al estudio</a>
         </div>
       </div>
       {% else %}
-      <form data-reveal method="post" action="/contacto" class="rounded-2xl border border-line bg-white/50 p-6 sm:p-8" novalidate>
+      <form data-reveal method="post" action="/contacto" class="rounded-2xl border border-line bg-sand/40 p-6 sm:p-8" novalidate>
         <h2 class="font-display text-2xl tracking-tight">Consulta</h2>
         <p class="mt-2 text-[12.5px] text-ink/50">Los campos marcados con <span class="text-accent">*</span> son obligatorios.</p>
 
@@ -48,22 +48,22 @@
           <div>
             <label for="name" class="block text-[12px] font-medium text-ink/70">Nombre y apellido <span class="text-accent">*</span></label>
             <input id="name" name="name" type="text" autocomplete="name" required value="{{ form.name }}"
-                   class="mt-2 w-full rounded-xl border border-line bg-paper px-4 py-3 text-sm text-ink placeholder-ink/30 transition focus:border-ink/40 focus:bg-white focus:outline-none">
+                   class="mt-2 w-full rounded-xl border border-line bg-paper px-4 py-3 text-sm text-ink placeholder-ink/30 transition focus:border-ink/40 focus:bg-paper focus:outline-none">
           </div>
           <div>
             <label for="phone" class="block text-[12px] font-medium text-ink/70">Teléfono</label>
             <input id="phone" name="phone" type="tel" autocomplete="tel" value="{{ form.phone }}"
-                   class="mt-2 w-full rounded-xl border border-line bg-paper px-4 py-3 text-sm text-ink placeholder-ink/30 transition focus:border-ink/40 focus:bg-white focus:outline-none">
+                   class="mt-2 w-full rounded-xl border border-line bg-paper px-4 py-3 text-sm text-ink placeholder-ink/30 transition focus:border-ink/40 focus:bg-paper focus:outline-none">
           </div>
           <div>
             <label for="email" class="block text-[12px] font-medium text-ink/70">Correo electrónico <span class="text-accent">*</span></label>
             <input id="email" name="email" type="email" autocomplete="email" required value="{{ form.email }}"
-                   class="mt-2 w-full rounded-xl border border-line bg-paper px-4 py-3 text-sm text-ink placeholder-ink/30 transition focus:border-ink/40 focus:bg-white focus:outline-none">
+                   class="mt-2 w-full rounded-xl border border-line bg-paper px-4 py-3 text-sm text-ink placeholder-ink/30 transition focus:border-ink/40 focus:bg-paper focus:outline-none">
           </div>
           <div>
             <label for="area" class="block text-[12px] font-medium text-ink/70">Área</label>
             <select id="area" name="area"
-                    class="mt-2 w-full appearance-none rounded-xl border border-line bg-paper px-4 py-3 text-sm text-ink transition focus:border-ink/40 focus:bg-white focus:outline-none">
+                    class="mt-2 w-full appearance-none rounded-xl border border-line bg-paper px-4 py-3 text-sm text-ink transition focus:border-ink/40 focus:bg-paper focus:outline-none">
               <option value="">Seleccioná una opción</option>
               {% for area in areas %}
               <option value="{{ area.slug }}" {% if form.area == area.slug %}selected{% endif %}>{{ area.title }}</option>
@@ -76,7 +76,7 @@
         <div class="mt-5">
           <label for="message" class="block text-[12px] font-medium text-ink/70">Contanos brevemente tu caso <span class="text-accent">*</span></label>
           <textarea id="message" name="message" rows="5" required
-                    class="mt-2 w-full rounded-xl border border-line bg-paper px-4 py-3 text-sm leading-relaxed text-ink placeholder-ink/30 transition focus:border-ink/40 focus:bg-white focus:outline-none"
+                    class="mt-2 w-full rounded-xl border border-line bg-paper px-4 py-3 text-sm leading-relaxed text-ink placeholder-ink/30 transition focus:border-ink/40 focus:bg-paper focus:outline-none"
                     placeholder="Qué pasó, cuándo y qué documentación tenés.">{{ form.message }}</textarea>
           <p class="mt-2 text-[11px] text-ink/40">No incluyas datos sensibles en este primer mensaje.</p>
         </div>
@@ -106,7 +106,7 @@
     </div>
 
     <aside class="lg:col-span-5">
-      <div data-reveal class="rounded-2xl bg-ink p-8 text-paper">
+      <div data-reveal class="panel rounded-2xl bg-ink p-8 text-paper">
         <p class="text-[10px] uppercase tracking-[0.26em] text-paper/40">Datos de contacto</p>
         <ul class="mt-6 space-y-6 text-sm">
           <li>
@@ -129,12 +129,12 @@
           </li>
         </ul>
         <div class="mt-8 flex flex-col gap-2">
-          <a href="https://wa.me/{{ site.whatsapp }}" target="_blank" rel="noopener" class="rounded-full bg-paper px-5 py-3 text-center text-[13px] font-medium text-ink transition hover:bg-white">Escribir por WhatsApp</a>
+          <a href="https://wa.me/{{ site.whatsapp }}" target="_blank" rel="noopener" class="rounded-full bg-paper px-5 py-3 text-center text-[13px] font-medium text-ink transition hover:bg-sand">Escribir por WhatsApp</a>
           <a href="{{ site.maps }}" target="_blank" rel="noopener" class="rounded-full border border-paper/20 px-5 py-3 text-center text-[13px] font-medium text-paper transition hover:border-paper/50">Ver ubicación</a>
         </div>
       </div>
 
-      <div data-reveal class="mt-5 rounded-2xl border border-line bg-white/40 p-7">
+      <div data-reveal class="mt-5 rounded-2xl border border-line bg-sand/40 p-7">
         <h2 class="text-[13px] font-semibold tracking-tight">Para agilizar la consulta</h2>
         <ul class="mt-4 space-y-3 text-[12.5px] leading-relaxed text-ink/55">
           <li class="flex gap-3"><span class="text-accent">—</span>Fechas y hechos ordenados cronológicamente.</li>

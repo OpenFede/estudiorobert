@@ -5,7 +5,7 @@
   <div class="mx-auto max-w-6xl px-5 py-16 sm:px-8 lg:py-20">
     <p class="text-[11px] uppercase tracking-[0.24em] text-ink/40">Áreas de práctica</p>
     <div class="mt-5 grid gap-6 lg:grid-cols-12 lg:items-end">
-      <h1 class="font-display text-[42px] leading-[1.06] tracking-[-0.02em] sm:text-6xl lg:col-span-8">Asesoramiento en las materias que más importan</h1>
+      <h1 class="font-display text-[34px] leading-[1.08] tracking-[-0.02em] sm:text-6xl lg:col-span-8">Asesoramiento en las materias que más importan</h1>
       <p class="text-sm leading-relaxed text-ink/60 lg:col-span-4">
         Seis áreas, un mismo método: diagnóstico preciso, opciones explicadas y ejecución prolija.
       </p>
@@ -16,7 +16,7 @@
 <section class="mx-auto max-w-6xl px-5 py-14 sm:px-8">
   <nav aria-label="Índice de áreas" class="flex flex-wrap gap-2">
     {% for area in areas %}
-    <a href="#{{ area.slug }}" class="rounded-full border border-line bg-white/40 px-4 py-2 text-[12px] text-ink/65 transition hover:border-ink/25 hover:text-ink">{{ area.title }}</a>
+    <a href="#{{ area.slug }}" class="rounded-full border border-line bg-sand/40 px-4 py-2 text-[12px] text-ink/65 transition hover:border-ink/25 hover:text-ink">{{ area.title }}</a>
     {% endfor %}
   </nav>
 </section>
